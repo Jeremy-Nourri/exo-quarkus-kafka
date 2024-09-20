@@ -1,6 +1,7 @@
 package com.example.entity;
 
 import com.example.dto.DepartementDto;
+import com.example.dto.OrganisationDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,13 @@ public class Employe {
 
     @Transient
     private DepartementDto departementDto;
+
+    private boolean isDepartementless;
+
+    @Column(name = "organisation_id")
+    private Long organisationId;
+
+    @Transient
+    private OrganisationDto organisationDto;
 
 }

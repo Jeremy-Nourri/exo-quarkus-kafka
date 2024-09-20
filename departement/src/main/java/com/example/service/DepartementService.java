@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.client.OrganisationServiceClient;
 import com.example.entity.Departement;
 import com.example.repository.DepartementRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -12,10 +11,6 @@ import java.util.List;
 
 @ApplicationScoped
 public class DepartementService {
-
-    @Inject
-    @RestClient
-    OrganisationServiceClient organisationServiceClient;
 
     @Inject
     DepartementRepository departementRepository;
@@ -64,30 +59,8 @@ public class DepartementService {
             throw new IllegalArgumentException("No departement found for id: " + id);
         }
 
-        departement.setOrganisationDto(organisationServiceClient.getOrganisationById(departement
-                .getOrganisationId()));
-
         return departement;
 
     }
 
-
-    public List<Departement> findByOrganisationId(Long organisationId) {
-        if (organisationId == null) {
-            throw new IllegalArgumentException("Organisation id cannot be null");
-        }
-
-        List<Departement> departements = departementRepository.findByOrganisationId(organisationId);
-
-        if (departements.isEmpty()) {
-            throw new IllegalArgumentException("No departement found for organisation id: " + organisationId);
-        }
-
-        departements.forEach(departement -> {
-            departement.setOrganisationDto(organisationServiceClient.getOrganisationById(departement
-                    .getOrganisationId()));
-        });
-
-        return departements;
-    }
 }

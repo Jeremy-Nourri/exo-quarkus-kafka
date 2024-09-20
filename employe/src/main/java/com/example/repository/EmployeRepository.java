@@ -9,4 +9,10 @@ public class EmployeRepository implements PanacheRepository<Employe> {
     public List<Employe> findByDepartementId(Long departementId) {
         return list("departementId", departementId);
     }
+
+    public List<Employe> findByOrganisationId(Long organisationId) {
+        return list("organisationId", organisationId);
+    }
+
+
 }

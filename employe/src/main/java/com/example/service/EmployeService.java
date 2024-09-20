@@ -1,6 +1,5 @@
 package com.example.service;
 
-import com.example.client.DepartementServiceClient;
 import com.example.entity.Employe;
 import com.example.repository.EmployeRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -8,15 +7,17 @@ import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
+import java.util.List;
+
 @ApplicationScoped
 public class EmployeService {
 
     @Inject
-    @RestClient
-    DepartementServiceClient departementServiceClient;
-
-    @Inject
     EmployeRepository employeRepository;
+    @Inject
+    EmployeEventProducer employeEventProducer;
+    @Inject
+
 
     @Transactional
     public Employe create(Employe employe) {
@@ -43,6 +44,33 @@ public class EmployeService {
         employeRepository.persist(existingEmploye);
         return existingEmploye;
     }
+
+    @Transactional
+    public void delete(Long id) {
+        Employe employe = employeRepository.findById(id);
+        if (employe == null) {
+            throw new IllegalArgumentException("No employe found for id: " + id);
+        }
+        employeRepository.delete(employe);
+    }
+
+    public Employe findById(Long id) {
+        return employeRepository.findById(id);
+    }
+
+    public List<Employe> getAllEmployes() {
+        return employeRepository.listAll();
+    }
+
+    public List<Employe> getEmployesByDepartementId(Long departementId) {
+        return employeRepository.find("departementId", departementId).list();
+    }
+
+    public List<Employe> getEmployesByOrganisationId(Long organisationId) {
+        return employeRepository.find("organisationId", organisationId).list();
+    }
+
+
 
 
 
